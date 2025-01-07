@@ -118,7 +118,7 @@ function App() {
 
   {/* Public routes for authentication */}
   <Route path="/log-in" element={<Login />} />
-  <Route path="/sign-up" element={<SignUp />} /> {/* New signup route */}
+  <Route path="/sign-up" element={<SignUp />} /> 
 </Routes>
 
 
