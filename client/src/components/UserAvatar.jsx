@@ -5,6 +5,9 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getInitials } from "../utils";
+import { logout } from "../redux/slices/authSlice"; // Redux logout action
+import { signOut } from "firebase/auth"; // Firebase signOut function
+import { auth } from "../firebase"; // Firebase configuration
 
 const UserAvatar = () => {
   const [open, setOpen] = useState(false);
@@ -13,8 +16,19 @@ const UserAvatar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const logoutHandler = () => {
-    console.log("logout");
+  const logoutHandler = async () => {
+    try {
+      // Log out the user from Firebase
+      await signOut(auth);
+
+      // Clear Redux user state
+      dispatch(logout());
+
+      // Redirect to the login page
+      navigate("/log-in");
+    } catch (error) {
+      console.error("Logout error:", error.message);
+    }
   };
 
   if (!user) {

@@ -1,12 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Import Link for navigation
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../redux/slices/authSlice";
-import { auth } from "../firebase"; // Firebase configuration
+import { auth } from "../firebase";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
-import { signInWithEmailAndPassword } from "firebase/auth"; // Import this function
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   const {
@@ -29,12 +29,16 @@ const Login = () => {
       const user = userCredential.user;
       console.log("User signed in:", user);
 
-      // Set user in Redux store
-      dispatch(setCredentials(user));
+      dispatch(
+        setCredentials({
+          uid: user.uid,
+          email: user.email,
+          name: user.displayName || "N/A", // Handle cases where displayName is not set
+        })
+      );
 
       console.log("Navigating to dashboard...");
       navigate("/dashboard"); // Trigger the navigation to dashboard
-
     } catch (error) {
       console.error("Login error:", error.message);
       // Optionally, display an error message to the user
@@ -51,7 +55,7 @@ const Login = () => {
               Manage all your tasks in one place!
             </span>
             <p className="flex flex-col gap-0 md:gap-4 text-4xl md:text-6xl 2xl:text-7xl font-black text-center text-blue-700">
-              <span>Cloud-Based</span>
+              {/*<span>Cloud-Based</span>*/}
               <span>Task Manager</span>
             </p>
           </div>
@@ -107,6 +111,17 @@ const Login = () => {
               />
             </div>
           </form>
+
+          {/* Add a link to the signup page */}
+          <p className="mt-4 text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              to="/sign-up"
+              className="text-blue-600 hover:underline font-semibold"
+            >
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
