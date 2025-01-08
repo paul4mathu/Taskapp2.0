@@ -99,26 +99,48 @@ function App() {
   return (
     <main className='w-full min-h-screen bg-[#f3f4f6] '>
       <Routes>
+  {/* Set the default route to login */}
+  <Route index element={<Navigate to="/log-in" />} />
+
   <Route element={<Layout />}>
-    {/* Check if user is logged in */}
+    {/* Protected routes */}
     <Route
-      index
-      path="/"
-      element={user ? <Navigate to="/dashboard" /> : <Navigate to="/log-in" />}
+      path="/dashboard"
+      element={user ? <Dashboard /> : <Navigate to="/log-in" />}
     />
-    <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/log-in" />} />
-    <Route path="/tasks" element={user ? <Tasks /> : <Navigate to="/log-in" />} />
-    <Route path="/completed/:status" element={user ? <Tasks /> : <Navigate to="/log-in" />} />
-    <Route path="/in-progress/:status" element={user ? <Tasks /> : <Navigate to="/log-in" />} />
-    <Route path="/todo/:status" element={user ? <Tasks /> : <Navigate to="/log-in" />} />
-    <Route path="/team" element={user ? <Users /> : <Navigate to="/log-in" />} />
-    <Route path="/trashed" element={user ? <Trash /> : <Navigate to="/log-in" />} />
-    <Route path="/task/:id" element={user ? <TaskDetails /> : <Navigate to="/log-in" />} />
+    <Route
+      path="/tasks"
+      element={user ? <Tasks /> : <Navigate to="/log-in" />}
+    />
+    <Route
+      path="/completed/:status"
+      element={user ? <Tasks /> : <Navigate to="/log-in" />}
+    />
+    <Route
+      path="/in-progress/:status"
+      element={user ? <Tasks /> : <Navigate to="/log-in" />}
+    />
+    <Route
+      path="/todo/:status"
+      element={user ? <Tasks /> : <Navigate to="/log-in" />}
+    />
+    <Route
+      path="/team"
+      element={user ? <Users /> : <Navigate to="/log-in" />}
+    />
+    <Route
+      path="/trashed"
+      element={user ? <Trash /> : <Navigate to="/log-in" />}
+    />
+    <Route
+      path="/task/:id"
+      element={user ? <TaskDetails /> : <Navigate to="/log-in" />}
+    />
   </Route>
 
   {/* Public routes for authentication */}
   <Route path="/log-in" element={<Login />} />
-  <Route path="/sign-up" element={<SignUp />} /> 
+  <Route path="/sign-up" element={<SignUp />} />
 </Routes>
 
 

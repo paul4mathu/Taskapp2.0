@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../redux/slices/authSlice";
 import { auth, db } from "../firebase"; // Firebase configuration
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -14,6 +16,7 @@ const Signup = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Initialize Redux dispatch
 
   const submitHandler = async (data) => {
     try {
@@ -26,18 +29,25 @@ const Signup = () => {
 
       const user = userCredential.user;
 
-      // Add additional user details to Firestore
-      await setDoc(doc(db, "users", user.uid), {
+      // Add user details to Firestore
+      await setDoc(doc(db, `admins/${user.uid}/users/${user.uid}`), {
         name: data.name,
         email: data.email,
         createdAt: new Date(),
       });
 
       console.log("User signed up:", user);
-      navigate("/dashboard"); // Redirect to the dashboard
+
+      // Dispatch user to Redux store
+      dispatch(setCredentials({
+        uid: user.uid,
+        email: user.email,
+        name: data.name,
+      }));
+
+      navigate("/dashboard"); // Redirect to dashboard
     } catch (error) {
       console.error("Signup error:", error.message);
-      // Optionally, display an error message to the user
     }
   };
 
@@ -51,7 +61,7 @@ const Signup = () => {
               Create an account to manage all your tasks!
             </span>
             <p className="flex flex-col gap-0 md:gap-4 text-4xl md:text-6xl 2xl:text-7xl font-black text-center text-blue-700">
-              <span>Cloud-Based</span>
+              {/*<span>Cloud-Based</span>*/}
               <span>Task Manager</span>
             </p>
           </div>
